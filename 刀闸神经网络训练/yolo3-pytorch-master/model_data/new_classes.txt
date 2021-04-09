@@ -1,0 +1,4 @@
+greenO
+switchdown
+redI
+switchup

@@ -1,0 +1,10 @@
+*.zip
+*.pt
+*.xml
+*.pth
+*.pkl
+*.weights
+imgs/
+VOCdevkit/
+__pycache__/
+.idea/
