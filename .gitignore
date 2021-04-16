@@ -3,8 +3,17 @@
 *.xml
 *.pth
 *.pkl
+*.h5
 *.weights
+*.doc
 imgs/
 VOCdevkit/
 __pycache__/
 .idea/
+
+.tox/
+.coverage
+.cache
+.pytest_cache
+nosetests.xml
+coverage.xml

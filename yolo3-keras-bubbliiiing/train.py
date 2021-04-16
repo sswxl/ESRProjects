@@ -193,14 +193,14 @@ if __name__ == "__main__":
     #   classes和anchor的路径，非常重要
     #   训练前一定要修改classes_path，使其对应自己的数据集
     #----------------------------------------------------#
-    classes_path = 'model_data/voc_classes.txt'    
+    classes_path = 'model_data/coco_classes.txt'
     anchors_path = 'model_data/yolo_anchors.txt'
     #------------------------------------------------------#
     #   权值文件请看README，百度网盘下载
     #   训练自己的数据集时提示维度不匹配正常
     #   预测的东西都不一样了自然维度不匹配
     #------------------------------------------------------#
-    weights_path = 'model_data/yolo_weights.h5'
+    weights_path = 'model_data/yolo.h5'
     #------------------------------------------------------#
     #   输入的shape大小
     #------------------------------------------------------#

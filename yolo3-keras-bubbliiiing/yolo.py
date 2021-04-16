@@ -21,7 +21,7 @@ from utils.utils import letterbox_image
 #--------------------------------------------#
 class YOLO(object):
     _defaults = {
-        "model_path"        : 'model_data/yolo_weights.h5',
+        "model_path"        : 'model_data/ep050-loss0.713-val_loss0.744.h5',
         "anchors_path"      : 'model_data/yolo_anchors.txt',
         "classes_path"      : 'model_data/coco_classes.txt',
         "score"             : 0.5,

@@ -30,8 +30,7 @@ def make_last_layers(filters_list, in_filters, out_filter):
                                         stride=1, padding=0, bias=True)
     ])
     return m
-
-class YoloBody(nn.Module):
+class YoloBody(torch.jit.ScriptModule):
     def __init__(self, config):
         super(YoloBody, self).__init__()
         self.config = config
@@ -65,13 +64,9 @@ class YoloBody(nn.Module):
         self.last_layer2 = make_last_layers([128, 256], out_filters[-3] + 128, final_out_filter2)
 
 
-    def forward(self, x):
-        def _branch(last_layer, layer_in):
-            for i, e in enumerate(last_layer):
-                layer_in = e(layer_in)
-                if i == 4:
-                    out_branch = layer_in
-            return layer_in, out_branch
+    @torch.jit.script_method
+    def forward(self, x, ):
+
         #---------------------------------------------------#   
         #   获得三个有效特征层，他们的shape分别是：
         #   52,52,256；26,26,512；13,13,1024
@@ -82,9 +77,21 @@ class YoloBody(nn.Module):
         #   第一个特征层
         #   out0 = (batch_size,255,13,13)
         #---------------------------------------------------#
-        # 13,13,1024 -> 13,13,512 -> 13,13,1024 -> 13,13,512 -> 13,13,1024 -> 13,13,512
-        out0, out0_branch = _branch(self.last_layer0, x0)
 
+        ######################
+        # 13,13,1024 -> 13,13,512 -> 13,13,1024 -> 13,13,512 -> 13,13,1024 -> 13,13,512
+        # out0, out0_branch = self._branch(self.last_layer0, x0)
+        out_branch0=torch.tensor(0)
+        out_branch1=torch.tensor(0)
+        out_branch2=torch.tensor(0)
+        i = 0
+        for module in self.last_layer0:
+            layer_in = module(x0)
+            if i == 4:
+                out_branch0= layer_in
+                print("out_branch0:  ",out_branch0)
+            i += 1
+        out0, out0_branch = layer_in, out_branch0
         # 13,13,512 -> 13,13,256 -> 26,26,256
         x1_in = self.last_layer1_conv(out0_branch)
         x1_in = self.last_layer1_upsample(x1_in)
@@ -96,8 +103,14 @@ class YoloBody(nn.Module):
         #   out1 = (batch_size,255,26,26)
         #---------------------------------------------------#
         # 26,26,768 -> 26,26,256 -> 26,26,512 -> 26,26,256 -> 26,26,512 -> 26,26,256
-        out1, out1_branch = _branch(self.last_layer1, x1_in)
-
+        # out1, out1_branch =  self._branch(self.last_layer1, x1_in)
+        j = 0
+        for module in self.last_layer1:
+            layer_in = module(x1_in)
+            if j == 4:
+                out_branch1 = layer_in
+            j += 1
+        out1, out1_branch = layer_in, out_branch1
         # 26,26,256 -> 26,26,128 -> 52,52,128
         x2_in = self.last_layer2_conv(out1_branch)
         x2_in = self.last_layer2_upsample(x2_in)
@@ -109,6 +122,13 @@ class YoloBody(nn.Module):
         #   out3 = (batch_size,255,52,52)
         #---------------------------------------------------#
         # 52,52,384 -> 52,52,128 -> 52,52,256 -> 52,52,128 -> 52,52,256 -> 52,52,128
-        out2, _ = _branch(self.last_layer2, x2_in)
+        # out2, _ =  self._branch(self.last_layer2, x2_in)
+        i = 0
+        for module in self.last_layer2:
+            layer_in = module(x2_in)
+            if i == 4:
+                out_branch2 = layer_in
+            i += 1
+        out2, _ = layer_in, out_branch2
         return out0, out1, out2
 

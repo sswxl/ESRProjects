@@ -2,7 +2,7 @@ import torch as t
 import torchvision as tv
 import matplotlib.pyplot as plt
 from PIL import Image
-from mynn import *
+# from mynn import *
 import cv2
 
 model = t.load('343018.pkl').cuda()  #加载训练好的pytorch模型

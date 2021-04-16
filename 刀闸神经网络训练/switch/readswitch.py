@@ -38,7 +38,7 @@ def predic(model,img_path,imgType,isShowSoftmax=False,isShowImg=False):
     image_tensor=transform(image_PIL)
     image_tensor=t.unsqueeze(image_tensor,dim=0).float()
 
-    image_tensor=image_tensor.cuda()
+    # image_tensor=image_tensor.cuda()
     out=model(image_tensor)
     print(out)
 
@@ -135,20 +135,20 @@ def imshow2(img):
 
 if __name__ == "__main__":
     #载入已经训练好的pkl文件
-    model=t.load('./503018.pkl')
-
+    model=t.jit.load('./resnet34-cpu.pt',map_location=t.device('cpu'))
+    # model=t.load('./9resnet34.pkl',map_location=t.device('cpu'))
+    # model = t.load("./7ttmodel.pkl")
     model=model.to(device)
     model.eval()
-
-    #对单个图片进行预测
+    # #对单个图片进行预测
     predic(model,'imgs/test/close/my1.jpg', classes[0], False, True)
-    predic(model,'imgs/test/close/IMG_20201221_102830.jpg', classes[0], False, True)
-    predic(model,'imgs/test/close/IMG_20201221_102823.jpg', classes[0], False, True)
-    predic(model,'imgs/test/fullopen/IMG_20201221_100432.jpg', classes[1], False, True)
-    predic(model,'imgs/test/fullopen/IMG_20201221_103601.jpg', classes[1], False, True)
-    predic(model,'imgs/test/halfopen/IMG_20201221_103737.jpg', classes[2], False, True)
-    predic(model,'imgs/test/halfopen/IMG_20201221_153218.jpg', classes[2], False, True)
-    predic(model,'imgs/train/fullopen/IMG_20201221_145940_1.jpg', classes[1], False, True)
-    predic(model,'imgs/train/close/IMG_20201221_143037.jpg', classes[0], False, True)
-
-    testAll(model)
+    # predic(model,'imgs/test/close/IMG_20201221_102830.jpg', classes[0], False, True)
+    # predic(model,'imgs/test/close/IMG_20201221_102823.jpg', classes[0], False, True)
+    # predic(model,'imgs/test/fullopen/IMG_20201221_100432.jpg', classes[1], False, True)
+    # predic(model,'imgs/test/fullopen/IMG_20201221_103601.jpg', classes[1], False, True)
+    # predic(model,'imgs/test/halfopen/IMG_20201221_103737.jpg', classes[2], False, True)
+    # predic(model,'imgs/test/halfopen/IMG_20201221_153218.jpg', classes[2], False, True)
+    # predic(model,'imgs/train/fullopen/IMG_20201221_145940_1.jpg', classes[1], False, True)
+    # predic(model,'imgs/train/close/IMG_20201221_143037.jpg', classes[0], False, True)
+    #
+    # testAll(model)

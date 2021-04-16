@@ -27,12 +27,12 @@ from utils.utils import (DecodeBox, bbox_iou, letterbox_image,
 class YOLO(object):
 
     _defaults = {
-        "model_path"        : 'logs/Epoch48-Total_Loss1.5558-Val_Loss1.3544.pth',
+        "model_path"        : 'logs/yolo3.pt',
         "classes_path"      : 'model_data/new_classes.txt',
         "model_image_size"  : (416, 416, 3),
         "confidence"        : 0.5,
         "iou"               : 0.3,
-        "cuda"              : True
+        "cuda"              : False
     }
 
     @classmethod
@@ -72,15 +72,16 @@ class YOLO(object):
         #---------------------------------------------------#
         #   建立yolov3模型
         #---------------------------------------------------#
-        self.net = YoloBody(self.config)
+        # self.net = YoloBody(self.config)
 
         #---------------------------------------------------#
         #   载入yolov3模型的权重
         #---------------------------------------------------#
         #print('Loading weights into state dict...')
-        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        state_dict = torch.load(self.model_path, map_location=device)
-        self.net.load_state_dict(state_dict)
+        # device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        # state_dict = torch.load(self.model_path, map_location=device)
+        # self.net.load_state_dict(state_dict)
+        self.net=torch.jit.load("logs/yolo3.pt")
         self.net = self.net.eval()
 
         if self.cuda:

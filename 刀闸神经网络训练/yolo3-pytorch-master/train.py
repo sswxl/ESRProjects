@@ -116,7 +116,7 @@ if __name__ == "__main__":
     #   是否使用Cuda
     #   没有GPU可以设置成False
     #-------------------------------#
-    Cuda = True
+    Cuda = False
     #-------------------------------#
     #   Dataloder的使用
     #-------------------------------#
@@ -134,7 +134,7 @@ if __name__ == "__main__":
     #------------------------------------------------------#
     #   权值文件请看README，百度网盘下载
     #------------------------------------------------------#
-    model_path = "model_data/yolo_weights.pth"
+    model_path = "model_data/Epoch48-Total_Loss1.5558-Val_Loss1.3544.pth"
     print('Loading weights into state dict...')
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model_dict = model.state_dict()
